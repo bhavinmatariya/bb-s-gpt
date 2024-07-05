@@ -12,6 +12,8 @@ async function sendMessage() {
     addMessageToChat('user', message);
     inputElement.value = '';
 
+    const loaderId = addLoaderToChat();
+
     try {
         const response = await fetch('/ask', {
             method: 'POST',
@@ -20,13 +22,16 @@ async function sendMessage() {
             },
             body: JSON.stringify({ question: message })
         });
+
         await response.json().then((data) => {
+            removeLoaderFromChat(loaderId);
             if (data) {
                 addMessageToChat('bot', data.response);
             }
         });
     } catch (error) {
         console.error('Error:', error);
+        removeLoaderFromChat(loaderId);
         addMessageToChat('bot', 'Sorry, something went wrong. Please try again later.');
     }
 }
@@ -38,4 +43,26 @@ function addMessageToChat(sender, message) {
     messageElement.textContent = message;
     chatMessages.appendChild(messageElement);
     chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function addLoaderToChat() {
+    const chatMessages = document.getElementById('chat-messages');
+    const loaderElement = document.createElement('div');
+    loaderElement.className = 'chat-message bot-message';
+    loaderElement.id = `loader-${Date.now()}`;
+    loaderElement.innerHTML = `
+        <div class="loader">
+            <span></span><span></span><span></span>
+        </div>
+    `;
+    chatMessages.appendChild(loaderElement);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    return loaderElement.id;
+}
+
+function removeLoaderFromChat(loaderId) {
+    const loaderElement = document.getElementById(loaderId);
+    if (loaderElement) {
+        loaderElement.remove();
+    }
 }

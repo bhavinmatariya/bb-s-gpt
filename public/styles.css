@@ -24,7 +24,7 @@ header {
     font-family: 'Courier New', Courier, monospace;
     font-size: 1.5em;
     font-weight: 500;
-    color: #999;
+    color: #333;
 }
 
 .header-right {
@@ -99,4 +99,42 @@ header {
     border-radius: 5px;
     margin-left: 10px;
     cursor: pointer;
+}
+
+/* Loading Animation */
+.loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+}
+
+.loader span {
+    display: block;
+    width: 8px;
+    height: 8px;
+    margin: 0 2px;
+    background: #007bff;
+    border-radius: 50%;
+    animation: loading 0.8s infinite alternate;
+}
+
+.loader span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.loader span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes loading {
+    from {
+        transform: scale(1);
+        opacity: 1;
+    }
+    to {
+        transform: scale(1.5);
+        opacity: 0.5;
+    }
 }
